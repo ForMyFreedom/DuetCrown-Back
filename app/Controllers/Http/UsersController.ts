@@ -13,7 +13,7 @@ export default class UsersController {
     const { password, ...entry } = await new UserValidator(ctx).validate(false)
 
     setAllNotDefined(entry)
-
+    console.log(password)
     const user = await User.create({ name: entry.name, password: password })
     const firstCharacter = await Character.create({
       ...standartCharEntry(entry),
