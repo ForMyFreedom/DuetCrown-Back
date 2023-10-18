@@ -14,6 +14,7 @@ export default class RegisterValidator {
 
   public static schema = schema.create({
     name: schema.string({ trim: true }),
+    registerToken: schema.string({ trim: true }),
     nickname: schema.string({ trim: true }),
     primaryColor: schema.string([rules.regex(/\#[0-9a-f]{6}/)]),
     password: schema.string({ trim: true }, [rules.regex(passwordRegex)]),

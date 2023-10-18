@@ -4,16 +4,20 @@ import UserValidator from 'App/Validator/UserValidator'
 import { Character as CharacterModel, ImagePlayerData, Stat } from 'App/Models/UserDomain'
 import Character from 'App/Models/Character'
 import RegisterValidator from 'App/Validator/RegisterValidator'
+import ApiToken from 'App/Models/ApiToken'
 
 const TokenConfig = { expiresIn: '4 hours' }
 
 export default class UsersController {
   public async store(ctx: HttpContextContract) {
     const { response, auth } = ctx
-    const { password, ...entry } = await new UserValidator(ctx).validate(false)
+    const { password, registerToken, ...entry }: typeof UserValidator.schema.props =
+      await new UserValidator(ctx).validate(false)
+
+    await (await ApiToken.findByOrFail('token', registerToken)).delete()
 
     setAllNotDefined(entry)
-    console.log(password)
+
     const user = await User.create({ name: entry.name, password: password })
     const firstCharacter = await Character.create({
       ...standartCharEntry(entry),
@@ -58,7 +62,7 @@ export default class UsersController {
   public async update(ctx: HttpContextContract) {
     const { response, params } = ctx
     const { id } = params
-    const { password, ...entry } = await new UserValidator(ctx).validate(true)
+    const { password, registerToken, ...entry } = await new UserValidator(ctx).validate(true)
     const user = await User.findOrFail(id)
 
     setAllNotDefined(entry)
@@ -156,6 +160,7 @@ function setDefaultData(
   return {
     name: data.name,
     nickname: data.nickname,
+    registerToken: data.registerToken,
     password: data.password,
     primaryColor: data.primaryColor,
     image: { url: data.image, xDesloc: 0, yDesloc: 0, scale: 1 },
