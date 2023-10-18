@@ -63,7 +63,7 @@ export default class UserValidator {
     schema.object().members({
       kind: schema.enum(['Peculiar', 'Combined'] as const),
       relativeCapacity: schema.string(),
-      agregated: schema.string([rules.extendedSignal()]) as SignalProp,
+      agregated: schema.string.optional([rules.extendedSignal()]) as SignalProp,
       name: schema.string(),
       description: schema.string(),
       codes: schema.array.optional().members(
