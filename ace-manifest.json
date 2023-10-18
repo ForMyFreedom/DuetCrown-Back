@@ -1,5 +1,37 @@
 {
   "commands": {
+    "new:acess_codes": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/NewAcessCodes",
+      "commandName": "new:acess_codes",
+      "description": "Create new registration codes",
+      "args": [
+        {
+          "type": "string",
+          "propertyName": "amount",
+          "name": "amount",
+          "required": true,
+          "description": "Amount of tokens"
+        }
+      ],
+      "aliases": [],
+      "flags": []
+    },
+    "refresh:acess_codes": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/RefreshAcessCodes",
+      "commandName": "refresh:acess_codes",
+      "description": "Remove all registration tokens",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",

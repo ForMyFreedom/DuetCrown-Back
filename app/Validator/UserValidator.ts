@@ -9,6 +9,7 @@ export default class UserValidator {
     const schema: any = UserValidator.schema
     if (isUpdate) {
       delete schema.tree.password
+      delete schema.tree.registerToken
     }
     return await this.ctx.request.validate({ schema: schema, messages: this.messages })
   }
@@ -107,6 +108,9 @@ export default class UserValidator {
 
   public static schema = schema.create({
     name: schema.string({ trim: true }),
+    registerToken: schema.string({ trim: true }, [
+      rules.exists({ table: 'api_tokens', column: 'token' }),
+    ]),
     password: schema.string({ trim: true }, [rules.regex(passwordRegex)]),
     nickname: schema.string({ trim: true }),
     primaryColor: schema.string([rules.regex(/\#[0-9a-f]{6}/)]),
@@ -202,5 +206,6 @@ export default class UserValidator {
     'moviments.codes.props.object': 'As propriedades do código do movimento devem ser um objeto',
     'things.array': 'As coisas devem ser um array',
     'things.members': 'As coisas devem ser objetos',
+    'registerToken.exists': 'Token de registro inválido',
   }
 }
