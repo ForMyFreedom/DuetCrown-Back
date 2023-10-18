@@ -44,5 +44,6 @@ export default class RegisterValidator {
     'image.string': 'A imagem deve ser uma string',
     'image.trim': 'A imagem não pode ter espaços no começo ou no fim',
     'image.url': 'A imagem deve ser uma URL válida',
+    'registerToken.required': 'O token de registro é obrigatório',
   }
 }
