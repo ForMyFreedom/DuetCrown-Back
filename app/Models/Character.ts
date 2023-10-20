@@ -43,7 +43,7 @@ export default class Character extends BaseModel implements CharacterModel {
   public sumary: StringRelation
 
   @column()
-  public capacities: Capacities
+  public capacities: Capacities<[]>
 
   @column()
   public stats: Stat[]

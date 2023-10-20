@@ -3,15 +3,40 @@ export type Signal = '+' | '-' | ''
 export type HigherSignals = '++' | '+++' | '+🌎' | '+🌎+' | '+🌎++' | '+🌎+++' | '+🌎🌎'
 export type LowerSignals = '--' | '---' | '-🌎' | '-🌎-' | '-🌎--' | '-🌎---' | '-🌎🌎'
 export type ExtendedSignal = Signal | HigherSignals | LowerSignals
-export type Letter = 'SS' | 'S' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'FF'
-export type Gliph = `${Letter}${Signal}`
+export type Gliph = `${string}${Signal}`
 
-export const GliphConst: Gliph[] = ['FF-', 'FF', 'FF+', 'F-', 'F', 'F+', 'E-', 'E', 'E+', 'D-', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+', 'S-', 'S', 'S+', 'SS-', 'SS', 'SS+']
+function isWord(str: string): boolean {
+  return /^[a-zA-Z]+$/.test(str);
+}
+
+export function isGliph(str: string): boolean {
+  const signalCount = (str.match(/[+-]/g) || []).length;
+  if (signalCount > 1) {
+    return false
+  }
+
+  if (signalCount === 1) {
+    const lastChar = str[str.length - 1];
+    if (lastChar !== '+' && lastChar !== '-') {
+      return false
+    }
+  }
+
+  const strWithoutLast = str.slice(0, -1);
+
+  if (!isWord(strWithoutLast)) {
+    return false
+  }
+
+  return true
+}
+
+
 export const SignalsConst: ExtendedSignal[] = ['-🌎🌎', '-🌎---', '-🌎--', '-🌎-', '-🌎', '---', '--', '-', '', '+', '++', '+++', '+🌎', '+🌎+', '+🌎++', '+🌎+++', '+🌎🌎']
 export const SimpleSignalsConst: Signal[] = ['-', '', '+']
 
 
-export type Capacities = {
+export type Capacities<Specials extends string[]> = {
   basics: {
     strength: Gliph
     agility: Gliph
@@ -20,12 +45,7 @@ export type Capacities = {
     senses: Gliph
     charisma: Gliph
   }
-  specials: {
-    ambition: Gliph
-    judge: Gliph
-    wish: Gliph
-    will: Gliph
-  }
+  specials: { [key in Specials[number]]: Gliph },
   peculiars: { [name: string]: Gliph }
   primal: {
     kind: 'Hope' | 'Despair'
@@ -91,7 +111,7 @@ export type Character = {
   image: ImagePlayerData,
   identity: StringRelation
   sumary: StringRelation
-  capacities: Capacities
+  capacities: Capacities<[]>
   stats: Stat[]
   toShowStats: {[kind in Stat['kind']]?: string[] } // string[] -> capacityName[]
   evolutions: Evolutions

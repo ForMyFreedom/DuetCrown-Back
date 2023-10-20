@@ -1,6 +1,6 @@
 // validator.ts
 import { validator } from '@ioc:Adonis/Core/Validator'
-import { GliphConst, SignalsConst, SimpleSignalsConst } from 'App/Models/UserDomain'
+import { SignalsConst, SimpleSignalsConst, isGliph } from 'App/Models/UserDomain'
 
 const isPercentage = (value: any) => typeof value === 'number' && value >= 0 && value <= 100
 
@@ -21,15 +21,12 @@ validator.rule('percentage', validateWith(isPercentage, 'percentage'))
 
 validator.rule(
   'gliph',
-  validateWith((v) => GliphConst.includes(v), 'gliph')
+  validateWith((v) => isGliph(v), 'gliph')
 )
 
 validator.rule(
   'gliphOrSignal',
-  validateWith(
-    (v: any) => SimpleSignalsConst.includes(v) || GliphConst.includes(v),
-    'gliphOrSignal'
-  )
+  validateWith((v: any) => SimpleSignalsConst.includes(v) || isGliph(v), 'gliphOrSignal')
 )
 
 validator.rule(
