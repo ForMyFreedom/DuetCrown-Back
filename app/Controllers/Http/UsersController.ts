@@ -103,6 +103,8 @@ function setAllNotDefined(entry: Partial<CharacterModel>): void {
   entry.toShowStats = entry.toShowStats ? entry.toShowStats : {}
   entry.identity = entry.identity ? entry.identity : {}
   entry.sumary = entry.sumary ? entry.sumary : {}
+  // @entry.bonus = entry.bonus ? entry.bonus : { capacities: {}, stats: [] }
+  // @entry.vantage = entry.vantage ? entry.vantage : { capacities: {}, stats: [] }
 
   for (const stat of entry.stats) {
     if (!stat.naturalMod) {

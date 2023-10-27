@@ -25,10 +25,15 @@ validator.rule(
 )
 
 validator.rule(
-  'gliphOrSignal',
+  'optionalGliph',
+  validateWith((v) => GliphConst.includes(v) || v === '', 'gliph')
+)
+
+validator.rule(
+  'optionalGliphOrSignal',
   validateWith(
-    (v: any) => SimpleSignalsConst.includes(v) || GliphConst.includes(v),
-    'gliphOrSignal'
+    (v: any) => SimpleSignalsConst.includes(v) || GliphConst.includes(v) || v === '',
+    'optionalGliphOrSignal'
   )
 )
 

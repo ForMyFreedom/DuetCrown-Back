@@ -65,14 +65,15 @@ export type Thing = {
   name: string
   description: string
   relativeCapacity?: string
-  gliph?: Gliph
+  gliph: Gliph | ''
+  equiped: boolean
 }
 
 export type Minucie = {
-  // Desing: NAME [EXTRANAME?]: DESCRIPTION
   name: string
-  extraName?: string
+  relative?: string
   description: string
+  applicated?: boolean
 }
 
 export type ImagePlayerData = {
@@ -100,4 +101,20 @@ export type Character = {
   things: Thing[]
   minucies: Minucie[]
   anotations: string
+  /*
+  bonus: {
+    capacities: {
+      [CapGrop in keyof Omit<Partial<Capacities>, 'primal'>]: Partial<Capacities[CapGrop]>
+    }
+    stats: Stat[]
+  }
+  vantage: {
+    capacities: {
+      [CapGrop in keyof Omit<Partial<Capacities>, 'primal'>]: {
+        [Cap in keyof Partial<Capacities[CapGrop]>]: number
+      }
+    }
+    stats: (Omit<Stat, 'naturalMod'> & {value: number})[]
+  }
+  */
 }

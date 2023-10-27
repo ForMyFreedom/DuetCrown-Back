@@ -55,7 +55,7 @@ export default class UserValidator {
       name: schema.string(),
       kind: schema.string(),
       progress: schema.number([rules.percentage()]),
-      value: schema.string([rules.gliphOrSignal()]) as GliphOrSignalProp,
+      value: schema.string.optional([rules.optionalGliphOrSignal()]) as GliphOrSignalProp,
     })
   )
 
@@ -80,15 +80,17 @@ export default class UserValidator {
       name: schema.string(),
       description: schema.string(),
       relativeCapacity: schema.string.optional(),
-      gliph: schema.string.optional([rules.gliph()]) as GliphProp,
+      gliph: schema.string.optional([rules.optionalGliph()]) as GliphProp,
+      equiped: schema.boolean(),
     })
   )
 
   private static minucesSchema = schema.array.optional().members(
     schema.object().members({
       name: schema.string(),
-      extraName: schema.string.optional(),
+      relative: schema.string.optional(),
       description: schema.string(),
+      applicated: schema.boolean.optional(),
     })
   )
 
@@ -105,6 +107,18 @@ export default class UserValidator {
     yDesloc: schema.number(),
     scale: schema.number(),
   })
+
+  /* // @
+  private static bonusSchema = schema.object.optional().members({
+    capacities: schema.object().anyMembers() as any, // @
+    stats: schema.object().anyMembers() as any, // @
+  })
+
+  private static vantageSchema = schema.object.optional().members({
+    capacities: schema.object().anyMembers() as any, // @
+    stats: schema.object().anyMembers() as any, // @
+  })
+  */
 
   public static schema = schema.create({
     name: schema.string({ trim: true }),
@@ -126,6 +140,8 @@ export default class UserValidator {
     moviments: this.movimentsSchema,
     things: this.thingsSchema,
     minucies: this.minucesSchema,
+    // @bonus: this.bonusSchema,
+    // @vantage: this.vantageSchema,
   })
 
   public messages: CustomMessages = {
