@@ -1,6 +1,19 @@
 import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { GliphOrSignalProp, GliphProp, SignalProp, passwordRegex } from './Definitions'
+import {
+  GliphOrSignalProp,
+  GliphProp,
+  ModificationsKindProp,
+  SignalProp,
+  passwordRegex,
+} from './Definitions'
+
+const ModificationsSchema = {
+  kind: schema.enum(['capacity', 'stat'] as const) as ModificationsKindProp,
+  value: schema.string([rules.extendedSignal()]) as SignalProp,
+  origin: schema.string(),
+  keywords: schema.array().members(schema.string()),
+}
 
 export default class UserValidator {
   constructor(protected ctx: HttpContextContract) {}
@@ -81,7 +94,8 @@ export default class UserValidator {
       description: schema.string(),
       relativeCapacity: schema.string.optional(),
       gliph: schema.string.optional([rules.optionalGliph()]) as GliphProp,
-      equiped: schema.boolean(),
+      applicated: schema.boolean(),
+      modifications: schema.array.optional().members(schema.object().members(ModificationsSchema)),
     })
   )
 
@@ -90,7 +104,8 @@ export default class UserValidator {
       name: schema.string(),
       relative: schema.string.optional(),
       description: schema.string(),
-      applicated: schema.boolean.optional(),
+      applicated: schema.boolean(),
+      modifications: schema.array.optional().members(schema.object().members(ModificationsSchema)),
     })
   )
 
@@ -108,12 +123,11 @@ export default class UserValidator {
     scale: schema.number(),
   })
 
-  /* // @
-  private static bonusSchema = schema.object.optional().members({
-    capacities: schema.object().anyMembers() as any, // @
-    stats: schema.object().anyMembers() as any, // @
-  })
+  private static modificationsSchema = schema.array
+    .optional()
+    .members(schema.object().members(ModificationsSchema))
 
+  /* // @
   private static vantageSchema = schema.object.optional().members({
     capacities: schema.object().anyMembers() as any, // @
     stats: schema.object().anyMembers() as any, // @
@@ -140,7 +154,7 @@ export default class UserValidator {
     moviments: this.movimentsSchema,
     things: this.thingsSchema,
     minucies: this.minucesSchema,
-    // @bonus: this.bonusSchema,
+    currentMods: this.modificationsSchema,
     // @vantage: this.vantageSchema,
   })
 

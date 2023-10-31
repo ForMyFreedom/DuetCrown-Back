@@ -1,4 +1,4 @@
-import { ExtendedSignal, Gliph, Signal } from 'App/Models/UserDomain'
+import { ExtendedSignal, Gliph, Modification, Signal } from 'App/Models/UserDomain'
 import { SchemaLiteral } from '@ioc:Adonis/Core/Validator'
 export const passwordRegex = /^(?=.*([a-z]|[A-Z]))(?=.*\d)[A-Za-z\d@$!%*?&_]{8,}$/
 
@@ -14,5 +14,10 @@ export type GliphOrSignalProp = {
 
 export type SignalProp = {
   t: ExtendedSignal
+  getTree(): SchemaLiteral
+}
+
+export type ModificationsKindProp = {
+  t: Modification['kind']
   getTree(): SchemaLiteral
 }

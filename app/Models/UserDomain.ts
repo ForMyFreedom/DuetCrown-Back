@@ -66,14 +66,16 @@ export type Thing = {
   description: string
   relativeCapacity?: string
   gliph: Gliph | ''
-  equiped: boolean
+  applicated: boolean
+  modifications?: Modification[]
 }
 
 export type Minucie = {
   name: string
   relative?: string
   description: string
-  applicated?: boolean
+  applicated: boolean
+  modifications?: Modification[]
 }
 
 export type ImagePlayerData = {
@@ -81,6 +83,13 @@ export type ImagePlayerData = {
   xDesloc: number
   yDesloc: number
   scale: number
+}
+
+export type Modification = {
+  kind: 'capacity' | 'stat'
+  value: ExtendedSignal
+  origin: string // thing or minucie name
+  keywords: string[] // In case of capacity, is ['name']... In case of stat, is ['kind', 'relativeCapacity']
 }
 
 export type StringRelation = {[key: string]: string}
@@ -101,13 +110,8 @@ export type Character = {
   things: Thing[]
   minucies: Minucie[]
   anotations: string
+  currentMods: Modification[]
   /*
-  bonus: {
-    capacities: {
-      [CapGrop in keyof Omit<Partial<Capacities>, 'primal'>]: Partial<Capacities[CapGrop]>
-    }
-    stats: Stat[]
-  }
   vantage: {
     capacities: {
       [CapGrop in keyof Omit<Partial<Capacities>, 'primal'>]: {

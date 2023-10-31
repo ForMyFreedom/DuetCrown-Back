@@ -1,6 +1,11 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
-import { ImagePlayerData, Character as CharacterModel, StringRelation } from './UserDomain'
+import {
+  ImagePlayerData,
+  Character as CharacterModel,
+  StringRelation,
+  Modification,
+} from './UserDomain'
 import {
   Capacities,
   Evolutions,
@@ -68,4 +73,7 @@ export default class Character extends BaseModel implements CharacterModel {
 
   @column()
   public anotations: string
+
+  @column()
+  public currentMods: Modification[]
 }
