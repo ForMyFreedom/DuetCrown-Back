@@ -14,6 +14,7 @@ export default class UsersController {
     const { password, registerToken, ...entry }: typeof UserValidator.schema.props =
       await new UserValidator(ctx).validate(false)
 
+    console.log(registerToken)
     await (await ApiToken.findByOrFail('token', registerToken)).delete()
 
     setAllNotDefined(entry)
@@ -35,6 +36,7 @@ export default class UsersController {
   public async register(ctx: HttpContextContract) {
     const registerData = await new RegisterValidator(ctx).validate()
     ctx.request.updateBody(setDefaultData(registerData))
+    console.log(ctx.request.body())
     return this.store(ctx)
   }
 
