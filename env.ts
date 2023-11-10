@@ -28,4 +28,5 @@ export default Env.rules({
   PG_PASSWORD: Env.schema.string.optional(),
   PG_DB_NAME: Env.schema.string(),
   HAS_SSL: Env.schema.boolean(),
+  MASTER_KEY: Env.schema.string(),
 })
