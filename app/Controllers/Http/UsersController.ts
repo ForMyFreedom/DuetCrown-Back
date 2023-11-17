@@ -8,6 +8,14 @@ import ApiToken from 'App/Models/ApiToken'
 
 const TokenConfig = { expiresIn: '4 hours' }
 
+type RecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends (infer U)[]
+    ? RecursivePartial<U>[]
+    : T[P] extends object | undefined
+    ? RecursivePartial<T[P]>
+    : T[P]
+}
+
 export default class UsersController {
   public async store(ctx: HttpContextContract) {
     const { response, auth } = ctx
@@ -20,7 +28,7 @@ export default class UsersController {
 
     const user = await User.create({ name: entry.name, password: password })
     const firstCharacter = await Character.create({
-      ...standartCharEntry(entry),
+      ...standartCharEntry(entry as Partial<CharacterModel>),
       userId: user.id,
     })
 
@@ -106,7 +114,7 @@ export default class UsersController {
   }
 }
 
-function setAllNotDefined(entry: Partial<CharacterModel>): void {
+function setAllNotDefined(entry: RecursivePartial<CharacterModel>): void {
   entry.stats = entry.stats ? entry.stats : []
   entry.extensions = entry.extensions ? entry.extensions : []
   entry.moviments = entry.moviments ? entry.moviments : []
@@ -121,6 +129,18 @@ function setAllNotDefined(entry: Partial<CharacterModel>): void {
   for (const stat of entry.stats) {
     if (!stat.naturalMod) {
       stat.naturalMod = ''
+    }
+  }
+
+  for (const min of entry.minucies) {
+    if (!min.imageUrl) {
+      min.imageUrl = ''
+    }
+  }
+
+  for (const thing of entry.things) {
+    if (!thing.imageUrl) {
+      thing.imageUrl = ''
     }
   }
 }

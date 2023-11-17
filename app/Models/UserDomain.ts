@@ -63,6 +63,7 @@ export type Moviment = {
 
 export type Thing = {
   name: string
+  imageUrl: string
   description: string
   relativeCapacity?: string
   gliph: Gliph | ''
@@ -72,6 +73,7 @@ export type Thing = {
 
 export type Minucie = {
   name: string
+  imageUrl: string
   relative?: string
   description: string
   applicated: boolean

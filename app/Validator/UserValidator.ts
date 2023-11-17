@@ -91,6 +91,7 @@ export default class UserValidator {
   private static thingsSchema = schema.array.optional().members(
     schema.object().members({
       name: schema.string(),
+      imageUrl: schema.string.optional(),
       description: schema.string(),
       relativeCapacity: schema.string.optional(),
       gliph: schema.string.optional([rules.optionalGliph()]) as GliphProp,
@@ -102,6 +103,7 @@ export default class UserValidator {
   private static minucesSchema = schema.array.optional().members(
     schema.object().members({
       name: schema.string(),
+      imageUrl: schema.string.optional(),
       relative: schema.string.optional(),
       description: schema.string(),
       applicated: schema.boolean(),
