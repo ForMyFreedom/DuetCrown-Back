@@ -6,7 +6,7 @@ import Character from 'App/Models/Character'
 import RegisterValidator from 'App/Validator/RegisterValidator'
 import ApiToken from 'App/Models/ApiToken'
 
-const TokenConfig = { expiresIn: '4 hours' }
+const TokenConfig = { expiresIn: '12 hours' }
 
 type RecursivePartial<T> = {
   [P in keyof T]?: T[P] extends (infer U)[]
