@@ -19,16 +19,16 @@ type RecursivePartial<T> = {
 export default class UsersController {
   public async store(ctx: HttpContextContract) {
     const { response, auth } = ctx
-    const { password, registerToken, ...entry }: typeof UserValidator.schema.props =
-      await new UserValidator(ctx).validate(false)
+    const { password, registerToken, ...entry } = await new RegisterValidator(ctx).validate()
 
     await (await ApiToken.findByOrFail('token', registerToken)).delete()
 
-    setAllNotDefined(entry)
+    let newEntry = setDefaultData(entry)
+    setAllNotDefined(newEntry)
 
     const user = await User.create({ name: entry.name, password: password })
     const firstCharacter = await Character.create({
-      ...standartCharEntry(entry as Partial<CharacterModel>),
+      ...standartCharEntry(newEntry as Partial<CharacterModel>),
       userId: user.id,
     })
 
@@ -38,12 +38,6 @@ export default class UsersController {
       token: token.token,
       playerId: token.user.id,
     })
-  }
-
-  public async register(ctx: HttpContextContract) {
-    const registerData = await new RegisterValidator(ctx).validate()
-    ctx.request.updateBody(setDefaultData(registerData))
-    return this.store(ctx)
   }
 
   public async allCharacters({ response, params }: HttpContextContract) {
@@ -188,16 +182,12 @@ function solveToShowStats(
   }
 }
 
-function setDefaultData(
-  data: typeof RegisterValidator.schema.props
-): Partial<typeof UserValidator.schema.props> {
+function setDefaultData(data: Partial<typeof RegisterValidator.schema.props>): Partial<Character> {
   return {
     name: data.name,
     nickname: data.nickname,
-    registerToken: data.registerToken,
-    password: data.password,
     primaryColor: data.primaryColor,
-    image: { url: data.image, xDesloc: 0, yDesloc: 0, scale: 1 },
+    image: { url: data.image || '', xDesloc: 0, yDesloc: 0, scale: 1 },
     anotations: '',
     capacities: {
       basics: {
