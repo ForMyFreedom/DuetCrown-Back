@@ -28,7 +28,7 @@ export type Capacities = {
   peculiars: { [name: string]: Gliph }
   primal: {
     kind: 'Hope' | 'Despair'
-    value: number // percentage
+    value: number|null // percentage
   }
 }
 

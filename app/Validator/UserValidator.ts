@@ -45,7 +45,9 @@ export default class UserValidator {
     }),
     primal: schema.object().members({
       kind: schema.enum(['Hope', 'Despair'] as const),
-      value: schema.number([rules.percentage()]),
+      value: schema.number.nullable([rules.percentage()]),
+    }),
+  })
 
   private static progressSchema = schema.object().members({
     basics: schema.object().members({
@@ -108,7 +110,7 @@ export default class UserValidator {
     schema.object().members({
       name: schema.string(),
       imageUrl: schema.string.optional(),
-      description: schema.string(),
+      description: schema.string.optional(),
       relativeCapacity: schema.string.optional(),
       gliph: schema.string.optional([rules.optionalGliph()]) as GliphProp,
       applicated: schema.boolean(),
@@ -121,7 +123,7 @@ export default class UserValidator {
       name: schema.string(),
       imageUrl: schema.string.optional(),
       relative: schema.string.optional(),
-      description: schema.string(),
+      description: schema.string.optional(),
       applicated: schema.boolean(),
       modifications: schema.array.optional().members(schema.object().members(ModificationsSchema)),
     })
