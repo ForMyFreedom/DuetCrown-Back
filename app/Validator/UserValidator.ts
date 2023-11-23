@@ -46,6 +46,22 @@ export default class UserValidator {
     primal: schema.object().members({
       kind: schema.enum(['Hope', 'Despair'] as const),
       value: schema.number([rules.percentage()]),
+
+  private static progressSchema = schema.object().members({
+    basics: schema.object().members({
+      strength: schema.number([rules.percentage()]),
+      agility: schema.number([rules.percentage()]),
+      body: schema.number([rules.percentage()]),
+      mind: schema.number([rules.percentage()]),
+      senses: schema.number([rules.percentage()]),
+      charisma: schema.number([rules.percentage()]),
+    }),
+    peculiars: schema.object().anyMembers(),
+    specials: schema.object().members({
+      ambition: schema.number([rules.percentage()]),
+      judge: schema.number([rules.percentage()]),
+      wish: schema.number([rules.percentage()]),
+      will: schema.number([rules.percentage()]),
     }),
   })
 
@@ -149,6 +165,7 @@ export default class UserValidator {
     identity: schema.object.optional().anyMembers(),
     sumary: schema.object.optional().anyMembers(),
     capacities: this.capacitySchema,
+    progress: this.progressSchema,
     stats: this.statsSchema,
     toShowStats: this.toShowStatsSchema,
     evolutions: this.evolutionSchema,
@@ -161,6 +178,7 @@ export default class UserValidator {
   })
 
   public messages: CustomMessages = {
+    '*.required': '{{field}} é obrigatório',
     'name.required': 'O nome é obrigatório',
     'name.string': 'O nome deve ser uma string',
     'name.trim': 'O nome não pode ter espaços no começo ou no fim',
