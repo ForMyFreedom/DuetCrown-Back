@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import UserValidator from 'App/Validator/UserValidator'
-import { Character as CharacterModel, ImagePlayerData, Stat } from 'App/Models/UserDomain'
+import { Player as CharacterModel, ImagePlayerData, Stat } from 'App/Models/UserDomain'
 import Character from 'App/Models/Character'
 import RegisterValidator from 'App/Validator/RegisterValidator'
 import ApiToken from 'App/Models/ApiToken'
@@ -40,32 +40,27 @@ export default class UsersController {
     })
   }
 
-  public async allCharacters({ response, params }: HttpContextContract) {
-    const { id } = params
-    const user = await User.findOrFail(id)
+  public async allCharacters(ctx: HttpContextContract) {
+    if (!isUserAllowed(ctx)) return
+    const { response, params } = ctx
+    const user = await User.findOrFail(params.id)
     await user.load('characters')
     response.ok(user.characters)
   }
 
-  public async recentCharacter({ response, params }: HttpContextContract) {
-    const { id } = params
-    const user = await User.findOrFail(id)
+  public async recentCharacter(ctx: HttpContextContract) {
+    if (!isUserAllowed(ctx)) return
+    const { response, params } = ctx
+    const user = await User.findOrFail(params.id)
     const lastCharacter = await this.getCharacterWithHigherId(user)
     response.ok(lastCharacter.toObject())
   }
 
-  private async getCharacterWithHigherId(user: User): Promise<Character> {
-    await user.load('characters')
-    const allCharacters = user.characters
-    const lastCharacter = allCharacters.sort((a, b) => b.id - a.id)[0]
-    return lastCharacter
-  }
-
   public async update(ctx: HttpContextContract) {
+    if (!isUserAllowed(ctx)) return
     const { response, params } = ctx
-    const { id } = params
     const { password, registerToken, ...entry } = await new UserValidator(ctx).validate(true)
-    const user = await User.findOrFail(id)
+    const user = await User.findOrFail(params.id)
 
     setAllNotDefined(entry)
 
@@ -77,9 +72,9 @@ export default class UsersController {
   }
 
   public async rollbackCharacter(ctx: HttpContextContract) {
+    if (!isUserAllowed(ctx)) return
     const { response, params } = ctx
-    const { id } = params
-    const user = await User.findOrFail(id)
+    const user = await User.findOrFail(params.id)
     const lastCharacter = await this.getCharacterWithHigherId(user)
     lastCharacter.delete()
     response.ok(lastCharacter)
@@ -105,6 +100,13 @@ export default class UsersController {
         playerId: token.user.id,
       })
     }
+  }
+
+  private async getCharacterWithHigherId(user: User): Promise<Character> {
+    await user.load('characters')
+    const allCharacters = user.characters
+    const lastCharacter = allCharacters.sort((a, b) => b.id - a.id)[0]
+    return lastCharacter
   }
 }
 
@@ -210,5 +212,15 @@ function setDefaultData(data: Partial<typeof RegisterValidator.schema.props>): P
       },
       peculiars: {},
     },
+  }
+}
+
+function isUserAllowed(ctx: HttpContextContract): boolean {
+  const { params, auth, response } = ctx
+  if (!params.id || !auth.user || auth.user.id === Number(params.id)) {
+    return true
+  } else {
+    response.unauthorized({ error: 'You are not allowed to access this resource' })
+    return false
   }
 }
