@@ -26,7 +26,7 @@ validator.rule(
 
 validator.rule(
   'optionalGliph',
-  validateWith((v) => GliphConst.includes(v) || v === '', 'gliph')
+  validateWith((v) => GliphConst.includes(v) || v === '', 'optionalGliph')
 )
 
 validator.rule(

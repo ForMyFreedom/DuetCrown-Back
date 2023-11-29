@@ -26,17 +26,12 @@ export default class AuthMiddleware {
   }
 
   public async handle(
-    { auth, params, response }: HttpContextContract,
+    { auth }: HttpContextContract,
     next: () => Promise<void>,
     customGuards: (keyof GuardsList)[]
   ) {
     const guards = customGuards.length ? customGuards : [auth.name]
     await this.authenticate(auth, guards)
-
-    if (!params.id || !auth.user || auth.user.id === Number(params.id)) {
-      await next()
-    } else {
-      response.unauthorized({ error: 'You are not allowed to access this resource' })
-    }
+    await next()
   }
 }

@@ -8,8 +8,7 @@ export type Gliph = `${Letter}${Signal}`
 
 export const GliphConst: Gliph[] = ['FF-', 'FF', 'FF+', 'F-', 'F', 'F+', 'E-', 'E', 'E+', 'D-', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+', 'S-', 'S', 'S+', 'SS-', 'SS', 'SS+']
 export const SignalsConst: ExtendedSignal[] = ['-🌎🌎', '-🌎---', '-🌎--', '-🌎-', '-🌎', '---', '--', '-', '', '+', '++', '+++', '+🌎', '+🌎+', '+🌎++', '+🌎+++', '+🌎🌎']
-export const SimpleSignalsConst: Signal[] = ['-', '', '+']
-
+export const StatConst: Stat['kind'][] = ['VIT', 'DMG', 'DEF', 'ATK']
 
 export type Capacities = {
   basics: {
@@ -29,9 +28,13 @@ export type Capacities = {
   peculiars: { [name: string]: Gliph }
   primal: {
     kind: 'Hope' | 'Despair'
-    value: number // percentage
+    value: number|null // percentage
   }
 }
+
+export type ProgessInCapacities = {
+  [T in keyof Omit<Capacities,'primal'>]: Record<keyof Capacities[T], number>
+};
 
 export type Stat = {
   kind: 'VIT' | 'DMG' | 'DEF' | 'ATK'
@@ -87,16 +90,44 @@ export type ImagePlayerData = {
   scale: number
 }
 
+
+/* // @ Consider using this
+type BaseModification = {
+  value: ExtendedSignal
+  origin: string
+}
+
+type CapacityModification = BaseModification & {
+  kind: 'capacity'
+  keywords: {
+    name: string
+  }
+}
+
+type StatModification = BaseModification & {
+  kind: 'stat'
+  keywords: {
+    relativeCapacity: string
+    kind: string
+  }
+}
+
+export type Modification = CapacityModification | StatModification
+*/
+
 export type Modification = {
   kind: 'capacity' | 'stat'
   value: ExtendedSignal
   origin: string // thing or minucie name
-  keywords: string[] // In case of capacity, is ['name']... In case of stat, is ['kind', 'relativeCapacity']
+  keywords: string[] // In case of capacity, is ['name']... In case of stat, is ['relativeCapacity', 'kind']
 }
+
+
 
 export type StringRelation = {[key: string]: string}
 
-export type Character = {
+export type Player = {
+  id: number
   name: string
   nickname: string
   primaryColor: string
@@ -104,6 +135,7 @@ export type Character = {
   identity: StringRelation
   sumary: StringRelation
   capacities: Capacities
+  progress: ProgessInCapacities
   stats: Stat[]
   toShowStats: {[kind in Stat['kind']]?: string[] } // string[] -> capacityName[]
   evolutions: Evolutions

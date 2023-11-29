@@ -1,5 +1,17 @@
 {
   "commands": {
+    "erase:old_characters": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/EraseAllOldCharacters",
+      "commandName": "erase:old_characters",
+      "description": "Remove all characters excepts from the most recent id for each user",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "new:acess_codes": {
       "settings": {
         "loadApp": true,
@@ -20,6 +32,18 @@
       "aliases": [],
       "flags": []
     },
+    "new:commum_moviment": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/NewCommumMoviment",
+      "commandName": "new:commum_moviment",
+      "description": "Create a new commum moviment",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "refresh:acess_codes": {
       "settings": {
         "loadApp": true,
@@ -29,6 +53,26 @@
       "commandName": "refresh:acess_codes",
       "description": "Remove all registration tokens",
       "args": [],
+      "aliases": [],
+      "flags": []
+    },
+    "update:password": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/UpdatePassword",
+      "commandName": "update:password",
+      "description": "Update the password of a user",
+      "args": [
+        {
+          "type": "string",
+          "propertyName": "name",
+          "name": "name",
+          "required": true,
+          "description": "Username"
+        }
+      ],
       "aliases": [],
       "flags": []
     },

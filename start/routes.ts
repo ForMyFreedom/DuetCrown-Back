@@ -41,4 +41,6 @@ Route.group(() => {
   Route.get('/character/all/:id', 'UsersController.allCharacters')
   Route.get('/character/recent/:id', 'UsersController.recentCharacter')
   Route.delete('/character/rollback/:id', 'UsersController.rollbackCharacter')
+
+  Route.resource('/moviment', 'CommumMovimentsController').only(['index'])
 }).middleware('auth')

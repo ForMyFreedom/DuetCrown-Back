@@ -2,9 +2,10 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 import {
   ImagePlayerData,
-  Character as CharacterModel,
+  Player as CharacterModel,
   StringRelation,
   Modification,
+  ProgessInCapacities,
 } from './UserDomain'
 import {
   Capacities,
@@ -49,6 +50,9 @@ export default class Character extends BaseModel implements CharacterModel {
 
   @column()
   public capacities: Capacities
+
+  @column()
+  public progress: ProgessInCapacities
 
   @column()
   public stats: Stat[]
