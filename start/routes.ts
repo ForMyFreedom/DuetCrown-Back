@@ -43,4 +43,6 @@ Route.group(() => {
   Route.delete('/character/rollback/:id', 'UsersController.rollbackCharacter')
 
   Route.resource('/moviment', 'CommumMovimentsController').only(['index'])
+  Route.get('/verify-connections', 'ConnectionsController.verify')
+  Route.delete('/destroy-connection', 'ConnectionsController.destroy')
 }).middleware('auth')
