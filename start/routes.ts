@@ -35,6 +35,7 @@ Route.group(() => {
   Route.post('/register', 'UsersController.store')
   Route.post('/login', 'UsersController.login')
   Route.get('/blankChar', 'UsersController.blankChar')
+  Route.resource('/moviment', 'CommumMovimentsController').only(['index'])
 })
 
 Route.group(() => {
@@ -42,8 +43,6 @@ Route.group(() => {
   Route.get('/character/all/:id', 'UsersController.allCharacters')
   Route.get('/character/recent/:id', 'UsersController.recentCharacter')
   Route.delete('/character/rollback/:id', 'UsersController.rollbackCharacter')
-
-  Route.resource('/moviment', 'CommumMovimentsController').only(['index'])
   Route.get('/verify-connections', 'ConnectionsController.verify')
   Route.delete('/destroy-connection', 'ConnectionsController.destroy')
 }).middleware('auth')
