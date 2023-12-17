@@ -40,6 +40,13 @@ export default class UsersController {
     })
   }
 
+  public async blankChar(ctx: HttpContextContract) {
+    const { response } = ctx
+    const blankEntry = setDefaultData({ name: 'Test', nickname: 'Test', primaryColor: '#999999' })
+    setAllNotDefined(blankEntry)
+    response.ok(standartCharEntry(blankEntry as Partial<CharacterModel>))
+  }
+
   public async allCharacters(ctx: HttpContextContract) {
     if (!isUserAllowed(ctx)) return
     const { response, params } = ctx
@@ -191,6 +198,23 @@ function setDefaultData(data: Partial<typeof RegisterValidator.schema.props>): P
     primaryColor: data.primaryColor,
     image: { url: data.image || '', xDesloc: 0, yDesloc: 0, scale: 1 },
     anotations: '',
+    progress: {
+      basics: {
+        strength: 0,
+        agility: 0,
+        body: 0,
+        mind: 0,
+        senses: 0,
+        charisma: 0,
+      },
+      specials: {
+        ambition: 0,
+        judge: 0,
+        wish: 0,
+        will: 0,
+      },
+      peculiars: {},
+    },
     capacities: {
       basics: {
         strength: 'FF',
@@ -211,6 +235,10 @@ function setDefaultData(data: Partial<typeof RegisterValidator.schema.props>): P
         value: 0,
       },
       peculiars: {},
+    },
+    evolutions: {
+      physical: 0,
+      espiritual: 0,
     },
   }
 }

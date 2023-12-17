@@ -34,6 +34,7 @@ Route.get('health', async ({ response }) => {
 Route.group(() => {
   Route.post('/register', 'UsersController.store')
   Route.post('/login', 'UsersController.login')
+  Route.get('/blankChar', 'UsersController.blankChar')
 })
 
 Route.group(() => {
