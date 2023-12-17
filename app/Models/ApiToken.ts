@@ -22,4 +22,7 @@ export default class ApiToken extends BaseModel {
 
   @column.dateTime()
   public expiresAt: DateTime
+
+  @column.dateTime()
+  public extraTimestamp: DateTime
 }

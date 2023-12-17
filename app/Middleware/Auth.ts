@@ -17,6 +17,8 @@ export default class AuthMiddleware {
       }
     }
 
+    await auth.use('api').revoke()
+
     throw new AuthenticationException(
       'Unauthorized access',
       'E_UNAUTHORIZED_ACCESS',
