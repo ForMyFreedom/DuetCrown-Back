@@ -77,8 +77,8 @@ export default class UserValidator {
   )
 
   private static evolutionSchema = schema.object.optional().members({
-    physical: schema.number([rules.percentage()]),
-    espiritual: schema.number([rules.percentage()]),
+    physical: schema.number([rules.unsigned()]),
+    espiritual: schema.number([rules.unsigned()]),
   })
 
   private static extensionsSchema = schema.array.optional().members(
