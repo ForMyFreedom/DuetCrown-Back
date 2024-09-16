@@ -1,12 +1,12 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import { ProgessInCapacities } from 'App/Models/UserDomain'
+import { Capacities } from 'App/Models/UserDomain'
 
 export default class Characters extends BaseSchema {
   protected tableName = 'characters'
 
   public async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.json('progress').notNullable().defaultTo(JSON.stringify(defaultProgress))
+      table.json('progress').notNullable().defaultTo(JSON.stringify(DEPRECATEDdefaultProgress))
     })
   }
 
@@ -17,7 +17,11 @@ export default class Characters extends BaseSchema {
   }
 }
 
-const defaultProgress: ProgessInCapacities = {
+export type DEPRECATEDProgessInCapacities = {
+  [T in keyof Omit<Capacities, 'primal'>]: Record<keyof Capacities[T], number>
+}
+
+export const DEPRECATEDdefaultProgress: DEPRECATEDProgessInCapacities = {
   basics: {
     strength: 0,
     agility: 0,
