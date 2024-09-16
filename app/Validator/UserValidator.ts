@@ -15,6 +15,11 @@ const ModificationsSchema = {
   keywords: schema.array().members(schema.string()),
 }
 
+const ProgressSchema = {
+  evo: schema.number(),
+  glyph: schema.string([rules.gliph()]) as GliphProp,
+}
+
 export default class UserValidator {
   constructor(protected ctx: HttpContextContract) {}
 
@@ -51,19 +56,19 @@ export default class UserValidator {
 
   private static progressSchema = schema.object().members({
     basics: schema.object().members({
-      strength: schema.number([rules.percentage()]),
-      agility: schema.number([rules.percentage()]),
-      body: schema.number([rules.percentage()]),
-      mind: schema.number([rules.percentage()]),
-      senses: schema.number([rules.percentage()]),
-      charisma: schema.number([rules.percentage()]),
+      strength: schema.object().members(ProgressSchema),
+      agility: schema.object().members(ProgressSchema),
+      body: schema.object().members(ProgressSchema),
+      mind: schema.object().members(ProgressSchema),
+      senses: schema.object().members(ProgressSchema),
+      charisma: schema.object().members(ProgressSchema),
     }),
     peculiars: schema.object().anyMembers(),
     specials: schema.object().members({
-      ambition: schema.number([rules.percentage()]),
-      judge: schema.number([rules.percentage()]),
-      wish: schema.number([rules.percentage()]),
-      will: schema.number([rules.percentage()]),
+      ambition: schema.object().members(ProgressSchema),
+      judge: schema.object().members(ProgressSchema),
+      wish: schema.object().members(ProgressSchema),
+      will: schema.object().members(ProgressSchema),
     }),
   })
 
